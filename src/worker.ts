@@ -24,9 +24,12 @@ export interface Env {
 	// Example binding to a Queue. Learn more at https://developers.cloudflare.com/queues/javascript-apis/
 	// MY_QUEUE: Queue;
 }
-
+const router = Router();
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		router.get('/', (request, env) => {
+			return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`);
+		});
 		return new Response('Hello CodeSandbox!');
 	},
 };
