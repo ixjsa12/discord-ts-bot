@@ -8,6 +8,8 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+import { Router } from 'itty-router/Router';
+import Discord from './discord';
 export interface Env {
 	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
 	// MY_KV_NAMESPACE: KVNamespace;
@@ -28,8 +30,9 @@ const router = Router();
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		router.get('/', (request, env) => {
-			return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`);
+			return new Response(`👋 Bot`);
 		});
-		return new Response('Hello CodeSandbox!');
+		Discord(router);
+		return router.handle(request, env);
 	},
 };
