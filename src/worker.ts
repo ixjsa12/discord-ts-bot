@@ -10,7 +10,11 @@
 
 import { Router } from 'itty-router/Router';
 import Discord from './discord';
+import webdav from './webdav';
+
+import { D1Orm } from 'd1-orm';
 export interface Env {
+	DB: D1Database;
 	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
 	// MY_KV_NAMESPACE: KVNamespace;
 	//
@@ -25,14 +29,17 @@ export interface Env {
 	//
 	// Example binding to a Queue. Learn more at https://developers.cloudflare.com/queues/javascript-apis/
 	// MY_QUEUE: Queue;
+	ORM: D1Orm;
 }
 const router = Router();
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		env.ORM = new D1Orm(env.DB);
 		router.get('/', (request, env) => {
 			return new Response(`👋 Bot`);
 		});
 		Discord(router);
+		webdav(router);
 		return router.handle(request, env);
 	},
 };
